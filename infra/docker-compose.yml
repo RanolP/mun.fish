@@ -4,7 +4,7 @@ services:
       context: ..
       dockerfile: infra/Dockerfile.web
     ports:
-      - "3000:3000"
+      - "80:80"
     environment:
       - NODE_ENV=production
     depends_on:
@@ -14,8 +14,6 @@ services:
     build:
       context: ..
       dockerfile: infra/Dockerfile.api
-    ports:
-      - "4000:4000"
     environment:
       - NODE_ENV=production
       - PORT=4000
