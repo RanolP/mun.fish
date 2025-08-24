@@ -26,7 +26,7 @@ RUN pnpm turbo build --filter=@mun-fish/web
 # Production stage
 FROM caddy:alpine
 COPY --from=builder /app/apps/web/dist /srv
-COPY --from=builder /app/apps/web/Caddyfile /etc/caddy/Caddyfile
+COPY infra/Caddyfile /etc/caddy/Caddyfile
 
 EXPOSE 3000
 CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]
