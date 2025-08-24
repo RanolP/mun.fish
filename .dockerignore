@@ -1,0 +1,14 @@
+node_modules
+.turbo
+dist
+.next
+*.log
+.git
+.gitignore
+.env*
+!.env.example
+coverage
+.nyc_output
+.DS_Store
+*.swp
+*.swo
