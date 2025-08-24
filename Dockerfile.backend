@@ -28,12 +28,22 @@ FROM node:20-alpine
 RUN corepack enable pnpm
 WORKDIR /app
 
-# Copy built application
-COPY --from=builder /app/apps/backend/dist ./dist
-COPY --from=builder /app/apps/backend/package.json ./
+# Copy workspace structure needed for production install
+COPY --from=builder /app/pnpm-workspace.yaml ./
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/pnpm-lock.yaml ./
+COPY --from=builder /app/turbo.json ./
+
+# Copy package.json files for workspace packages
+COPY --from=builder /app/packages/eslint-config/package.json ./packages/eslint-config/
+COPY --from=builder /app/packages/typescript-config/package.json ./packages/typescript-config/
+COPY --from=builder /app/apps/backend/package.json ./apps/backend/
 
 # Install production dependencies only
-RUN pnpm install --prod --frozen-lockfile
+RUN pnpm install --prod --frozen-lockfile --filter=@mun-fish/backend
+
+# Copy built application
+COPY --from=builder /app/apps/backend/dist ./apps/backend/dist
 
 EXPOSE 4000
-CMD ["node", "dist/index.js"]
+CMD ["node", "apps/backend/dist/index.js"]
