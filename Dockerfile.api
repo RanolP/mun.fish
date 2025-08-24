@@ -11,17 +11,17 @@ COPY turbo.json ./
 # Copy package files
 COPY packages/eslint-config/package.json ./packages/eslint-config/
 COPY packages/typescript-config/package.json ./packages/typescript-config/
-COPY apps/backend/package.json ./apps/backend/
+COPY apps/api/package.json ./apps/api/
 
 # Install dependencies
 RUN --mount=type=cache,id=pnpm,target=/root/.local/share/pnpm/store pnpm install --frozen-lockfile
 
 # Copy source files
 COPY packages ./packages
-COPY apps/backend ./apps/backend
+COPY apps/api ./apps/api
 
 # Build the backend
-RUN pnpm turbo build --filter=@mun-fish/backend
+RUN pnpm turbo build --filter=@mun-fish/api
 
 # Production stage
 FROM node:20-alpine
@@ -40,10 +40,10 @@ COPY --from=builder /app/packages/typescript-config/package.json ./packages/type
 COPY --from=builder /app/apps/backend/package.json ./apps/backend/
 
 # Install production dependencies only
-RUN pnpm install --prod --frozen-lockfile --filter=@mun-fish/backend
+RUN pnpm install --prod --frozen-lockfile --filter=@mun-fish/api
 
 # Copy built application
-COPY --from=builder /app/apps/backend/dist ./apps/backend/dist
+COPY --from=builder /app/apps/api/dist ./apps/api/dist
 
 EXPOSE 4000
-CMD ["node", "apps/backend/dist/index.js"]
+CMD ["node", "apps/api/dist/index.js"]
