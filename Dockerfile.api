@@ -37,7 +37,7 @@ COPY --from=builder /app/turbo.json ./
 # Copy package.json files for workspace packages
 COPY --from=builder /app/packages/eslint-config/package.json ./packages/eslint-config/
 COPY --from=builder /app/packages/typescript-config/package.json ./packages/typescript-config/
-COPY --from=builder /app/apps/backend/package.json ./apps/backend/
+COPY --from=builder /app/apps/api/package.json ./apps/api/
 
 # Install production dependencies only
 RUN pnpm install --prod --frozen-lockfile --filter=@mun-fish/api

@@ -5,6 +5,8 @@
 - `pnpm lint` : Running package lints
 - `pnpm typecheck` : Running package type checks
 
+- `DOCKER_BUILDKIT=0 docker-compose up` : production test
+
 ## Guides
 
 - Files must be modular & single-purpose
